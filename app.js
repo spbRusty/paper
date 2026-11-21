@@ -1,7 +1,7 @@
 const TOPICS=['Заметки','Истории','Наука','Культура','Технологии','Разное'];
 const ids=['3705398','4820651','1183790','1100090','1240588','4631747','4226041','2296671'];
 const SEED=ids.map(n=>({id:'jr-'+n,title:'Материал JoyReactor № '+n,excerpt:'Публикация добавлена в очередь импорта. Текст и обсуждение нужно сверить с оригиналом.',topic:'Разное',tags:['JoyReactor','импорт'],status:'draft',body:'Содержание публикации пока не загружено: JoyReactor недоступен для чтения из среды публикации. Добавьте текст и полезные выдержки из комментариев через редактор.\n\nПосле проверки сохраните материал и оставьте ссылку на первоисточник.',source:'https://joyreactor.cc/post/'+n}));
-const KEY='paper_articles_v1';let articles=load(),topic='all',onlyDrafts=false,desc=true;
+const KEY='paper_articles_v1';const THEME_KEY='paper_theme';let articles=load(),topic='all',onlyDrafts=false,desc=true;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||SEED.slice()}catch(e){return SEED.slice()}}
@@ -59,3 +59,7 @@ $('#file').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0].tex
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditor();closeReader()}});
 $('#modal').onclick=e=>{if(e.target===$('#modal'))closeEditor()};$('#reader').onclick=e=>{if(e.target===$('#reader'))closeReader()};
 render();
+// Переключение цветовой темы
+function setTheme(theme){document.documentElement.dataset.theme=theme;localStorage.setItem(THEME_KEY,theme);const dark=theme==='dark';$('#theme-toggle').textContent=dark?'☀':'☾';$('#theme-toggle').title=dark?'Светлая тема':'Тёмная тема';$('#theme-toggle').setAttribute('aria-label',dark?'Включить светлую тему':'Включить тёмную тему');document.querySelector('meta[name="theme-color"]')?.setAttribute('content',dark?'#171916':'#f2f0eb')}
+setTheme(localStorage.getItem(THEME_KEY)||'light');
+$('#theme-toggle').onclick=()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
