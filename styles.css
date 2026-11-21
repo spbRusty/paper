@@ -42,3 +42,8 @@
 .reader-gallery img{display:block;width:100%;height:auto;max-height:560px;object-fit:contain;background:var(--line);border-radius:8px}
 .reader-gallery figcaption{padding:6px 2px;color:var(--muted);font-size:10px;letter-spacing:.12em}
 @media(max-width:620px){.reader-gallery{grid-template-columns:1fr;gap:16px}.reader-gallery img{max-height:none}}
+
+/* Изображения внутри соответствующих разделов */
+.article-inline-image{margin:22px auto 28px;max-width:760px;text-align:center}
+.article-inline-image img{display:block;width:100%;height:auto;max-height:620px;object-fit:contain;border-radius:8px}
+.article-inline-image figcaption{padding-top:7px;color:var(--muted);font-size:10px;letter-spacing:.08em}
