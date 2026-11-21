@@ -31,13 +31,14 @@ function editor(a){
  $('#body').value=a?.body||'';$('#source').value=a?.source||'';$('#delete').hidden=!a;$('#modal').hidden=false;document.body.style.overflow='hidden';$('#title').focus();
 }
 function closeEditor(){$('#modal').hidden=true;document.body.style.overflow=''}
-function md(s){
+function md(s,images=[]){
  s=esc(s).replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h2>$1</h2>').replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>');
- return s.split(/\n{2,}/).map(p=>/^<(h[23]|blockquote)/.test(p)?p:'<p>'+p.replace(/\n/g,'<br>')+'</p>').join('');
+ s=s.replace(/\[\[img:(\d+)\]\]/g,(_,n)=>{const url=images[Number(n)];return url?'<figure class="article-inline-image"><img src="'+esc(url)+'" alt="Иллюстрация" loading="lazy"></figure>':''});
+ return s.split(/\n{2,}/).map(p=>/^<(h[23]|blockquote|figure)/.test(p)?p:'<p>'+p.replace(/\n/g,'<br>')+'</p>').join('');
 }
 function read(id){
  const a=articles.find(x=>x.id===id);if(!a)return;
- $('#reader-content').innerHTML='<div class="reader-meta">'+esc(a.topic)+' · '+(a.status==='draft'?'ЧЕРНОВИК':'PAPER JOURNAL')+'</div><h1>'+esc(a.title)+'</h1><p class="reader-excerpt">'+esc(a.excerpt)+'</p><div class="reader-tags">'+(a.tags||[]).map(t=>'<span class="tag">#'+esc(t)+'</span>').join('')+'</div>'+(a.images?.length?'<div class="reader-gallery">'+a.images.map((url,i)=>'<figure><img src="'+esc(url)+'" alt="'+esc(a.title)+' — иллюстрация '+(i+1)+'" loading="lazy"><figcaption>'+String(i+1).padStart(2,'0')+' / '+a.images.length+'</figcaption></figure>').join('')+'</div>':'')+'<div class="reader-body">'+md(a.body,a.images)+'</div>'+(a.source?'<a class="reader-source" href="'+esc(a.source)+'" target="_blank" rel="noopener">ПЕРВОИСТОЧНИК ↗</a>':'')+'<p><button class="dark" id="edit-reader">Редактировать</button></p>';
+ $('#reader-content').innerHTML='<div class="reader-meta">'+esc(a.topic)+' · '+(a.status==='draft'?'ЧЕРНОВИК':'PAPER JOURNAL')+'</div><h1>'+esc(a.title)+'</h1><p class="reader-excerpt">'+esc(a.excerpt)+'</p><div class="reader-tags">'+(a.tags||[]).map(t=>'<span class="tag">#'+esc(t)+'</span>').join('')+'</div>'+'<div class="reader-body">'+md(a.body,a.images)+'</div>'+(a.source?'<a class="reader-source" href="'+esc(a.source)+'" target="_blank" rel="noopener">ПЕРВОИСТОЧНИК ↗</a>':'')+'<p><button class="dark" id="edit-reader">Редактировать</button></p>';
  $('#reader').hidden=false;document.body.style.overflow='';$('#edit-reader').onclick=()=>{$('#reader').hidden=true;editor(a)};
 }
 function closeReader(){$('#reader').hidden=true;document.body.style.overflow=''}
