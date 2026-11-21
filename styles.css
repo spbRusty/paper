@@ -35,3 +35,10 @@
 :root[data-theme="dark"] #empty{border-color:var(--line);color:#b4bbae}
 :root[data-theme="dark"] footer{border-color:var(--line)}
 @media(max-width:720px){:root[data-theme="dark"] .nav{background:#292f28}}
+
+/* Иллюстрации оригинальных публикаций */
+.reader-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:30px 0 38px}
+.reader-gallery figure{margin:0;min-width:0}
+.reader-gallery img{display:block;width:100%;height:auto;max-height:560px;object-fit:contain;background:var(--line);border-radius:8px}
+.reader-gallery figcaption{padding:6px 2px;color:var(--muted);font-size:10px;letter-spacing:.12em}
+@media(max-width:620px){.reader-gallery{grid-template-columns:1fr;gap:16px}.reader-gallery img{max-height:none}}
